@@ -1,0 +1,26 @@
+.coro {
+  
+  white-space: nowrap;
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.card {
+  display: inline-block;
+  
+}
+
+.card img {
+    cursor: pointer;
+  margin: 30px;
+  width: 700px; /* Adjust width as needed */
+  height: 300px; /* Adjust height as needed */
+}
