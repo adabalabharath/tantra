@@ -18,6 +18,7 @@ import Bag from "./pages/Bag";
 import Error from "./pages/Error";
 import ProductCard from "./components/Products/ProductCard";
 import ProductDet from "./components/Products/ProductDet";
+
 function App() {
   const { hover, women, kid} =
     useContext(HoverContext);

@@ -1,14 +1,17 @@
 import { Box, Button, Center, FormLabel, Input, Text } from '@chakra-ui/react'
 import axios from 'axios'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { HoverContext } from '../redux/HoverProvider'
+import Logout from './Logout'
+import Store from './Store'
 
 const Login = () => {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
-
+    const {token,setToken}=useContext(HoverContext)
     const location=useLocation()
     console.log(location)
     const nav=useNavigate()
@@ -27,6 +30,17 @@ const Login = () => {
       )).catch(error=>{
         document.getElementById('err').innerText='wrong credentials'
         nav('/store')})
+    }
+
+   
+   const handleLogout=()=>{
+    localStorage.removeItem('token')
+    nav('/login')
+   }
+   
+
+    if(localStorage.getItem('token')){
+       return <Button onClick={handleLogout}>logout</Button>
     }
 
   return (

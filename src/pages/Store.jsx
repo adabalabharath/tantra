@@ -10,13 +10,15 @@ import { getProd } from '../redux/action'
 import Pagination from '../components/Products/Pagination'
 const Store = () => {
   
-   
-
-
+   const data=useSelector(s=>s.productReducer.data)
+   const nav=useNavigate()
+   if(data.length===0){
+      return <Error/>
+    }
 
   return (
     <>
-    <Box display='flex' >
+    <Box display='flex' bg="gray.100">
     <Box width='25%'>
       <Filters/>
     </Box>

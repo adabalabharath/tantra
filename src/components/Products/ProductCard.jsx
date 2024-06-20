@@ -9,7 +9,7 @@ const ProductCard = ({x}) => {
   return (
     <>
     <Link to={`/card/${x.id}`}>
-     <Box width='200px' padding='10px' height='300px' style={{cursor:'pointer',margin:'20px',border:'5px solid rgb(58, 168, 211)',borderRadius:'20px'}} >
+     <Box w='200px' p='10px' h='300px' style={{cursor:'pointer',margin:'20px',border:'5px solid rgb(58, 168, 211)'}} boxShadow='lg' borderRadius='lg' bg='white' >
       
         <Image width='100%' height='60%' src={x.image}/>
         <Box display='flex' alignItems='center'>

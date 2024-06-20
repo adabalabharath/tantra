@@ -3,93 +3,106 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HoverContext } from "../redux/HoverProvider";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { fetchBag } from "../redux/action";
+import Total from "./Total";
+import Empty from "./Empty";
 
 const Bag = () => {
-  const { bag, bagId, size } = useContext(HoverContext);
-  const data=useSelector(store=>store.bagReducer.data)
-  console.log(data)
+  const { bagId, size, setOriginal } = useContext(HoverContext);
+  const data = useSelector((store) => store.bagReducer.data);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const nav=useNavigate()
+  const fetch = () => {
+    dispatch(fetchBag(bagId, size));
   };
-
-  const fetch=()=>{
-    dispatch(fetchBag(bagId))
-  }
 
   useEffect(() => {
     fetch();
-  }, [bagId]);
+    if (data.length === 0) {
+    nav('/empty')
+  }
+  }, [bagId,dispatch]);
 
-  console.log(data);
+  
 
   return (
-    <>
-      <Button onClick={handleLogout}>Logout</Button>
-      <Box>
-      {data.map((product, index) =>
-        
-       {const originalPrice = Math.round(product.cost / (1 - product.discount / 100));    return(
-      <Box key={index} margin="20px" width="50%" border='1px solid black' display='flex'gap='30px'  position='relative' height='150px'>
-        <Box  height='100%'>
-        <Image src={product.image} height='100%' />
-        </Box>
-        <input type="checkbox"style={{ position: 'absolute', left: '10px', top: '10px' }}/>
-        <Box>
-      <Text fontWeight="medium">
-       {product.brand}
-      </Text>
-      <Text fontWeight="medium">{product.name}</Text>
-      <div style={{ display: "flex", alignItems: "center" }}>
-      <Text >{product.rating}</Text>
-      <FontAwesomeIcon icon={faStar} size="xl" color="gold" /> |
-      <Text fontSize="2xl">reviews : {product.reviews}</Text>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <Text  fontWeight="medium">
-        &#8377;
-        {product.cost}
-       </Text>
-       <Text>
-        MRP<del style={{ fontSize: "20px" }}> &#8377;{originalPrice}</del>
-       </Text>
-       <Text >Discount : {product.discount}%</Text>
-    </div>
-    <Text fontWeight="medium" color="green">
-      Inclusive of all taxes
-    </Text>
-    <br />
-    </Box>
-    <Box display='flex' flexDirection='column' gap='20px' justifyContent='center'>
-       <Select >
-        <option default  value={size}>{size}</option>
-        <option value='S'>S</option>
-         <option value='M'>M</option>
-          <option value='L'>L</option>
-           <option value='XL'>xl</option>
-      </Select>
-      <Select >
-        <option value='Size' default>Quantity</option>
-        <option value='1'>1</option>
-         <option value='2'>2</option>
-          <option value='3'>3</option>
-           <option value='4'>4</option>
-            <option value='5'>5</option>
-      </Select>
-    </Box>
-  </Box>
-)})}
+    <Box p="20px" bg="gray.100" minH="100vh">
+      <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+        {data.map((product, index) => {
+          const originalPrice = Math.round(
+            product.cost / (1 - product.discount / 100)
+          );
+          setOriginal(originalPrice);
 
-       
-       </Box>
-    </>
+          return (
+            <Box
+              key={index}
+              m="20px"
+              p="20px"
+              w={{ base: "100%"}}
+              borderWidth="1px"
+              borderRadius="lg"
+              boxShadow="lg"
+              bg="white"
+              position="relative"
+            >
+              <Box display="flex" alignItems="center">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  boxSize="150px"
+                  objectFit="cover"
+                  mr="20px"
+                />
+                <Box flex="1">
+                  <Text fontWeight="bold" fontSize="xl" mb="10px">
+                    {product.brand}
+                  </Text>
+                  <Text mb="10px">{product.name}</Text>
+                  <Box display="flex" alignItems="center" mb="10px">
+                    <Text mr="5px">{product.rating}</Text>
+                    <FontAwesomeIcon icon={faStar} size="lg" color="gold" />
+                    <Text ml="10px" fontSize="sm">
+                      Reviews: {product.reviews}
+                    </Text>
+                  </Box>
+                  <Box display="flex" alignItems="center" mb="10px">
+                    <Text fontWeight="bold" fontSize="lg" mr="10px">
+                      ₹{product.cost}
+                    </Text>
+                    <Text fontSize="sm" color="gray.500" textDecoration="line-through">
+                      ₹{originalPrice}
+                    </Text>
+                    <Text fontSize="sm" color="green.500" ml="10px">
+                      Discount: {product.discount}%
+                    </Text>
+                  </Box>
+                  <Text fontSize="sm" color="green.500">
+                    Inclusive of all taxes
+                  </Text>
+                </Box>
+              </Box>
+              <Box position="absolute" top="10px" left="10px">
+                <Input type="checkbox" />
+              </Box>
+              <Box mt="20px">
+                <Select placeholder="Select size" defaultValue={product.size}>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                </Select>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+      <Box mt="20px">
+        <Total />
+      </Box>
+    </Box>
   );
 };
 

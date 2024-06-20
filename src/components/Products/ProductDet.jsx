@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 const ProductDet = () => {
   let [product, setProduct] = useState({});
 
-  const {size, setSize,bag,setBag,original, setOriginal,bagId,setBagId} = useContext(HoverContext);
+  const {size, setSize,bag,setBag,original, setOriginal,bagId,setBagId,setWishlist,setWish,wish} = useContext(HoverContext);
 
   const [error,setError]=useState(false)
 
@@ -39,11 +39,11 @@ const ProductDet = () => {
 
   useMemo(() => {
     fetch();
-    
+    setWish(false)
   }, []);
 
   const handleSize=(size)=>{
-    setSize(size)
+    setSize(prev=>[...prev,size])
     setClick(true)
     setError(false)
   }
@@ -51,28 +51,30 @@ const ProductDet = () => {
     if(click){
         setBag(prev=>prev+1)
         setBagId(prev=>[...prev,id])
-         setClick(false)
+        setClick(false)
 
     }else{
         setError(true)
     }
   }
+
+  
   const handleWish=(id)=>{
-    let arr=[]
-    arr.push(id)
-    dispatch(fetchWish(arr))
-     nav('/wishlist')
+    setWish(true)
+    setWishlist(prev=>[...prev,id])
+    
+     
   }
 
   return (
     <>
-      <Box margin="20px" display="flex">
+      <Box margin="20px" display="flex"  boxShadow='xl' p='10px'>
         <Box style={{ height: "600px", width: "50%" }}>
           <img src={product.image} style={{ height: "500px", width: "100%" }} />
-          <Text fontSize="5xl" fontWeight="medium">
+          <Text fontWeight="bold" fontSize="5xl" mb="10px">
             {product.brand}
           </Text>
-          <Text fontWeight="medium">{product.name}</Text>
+          <Text fontWeight="xl">{product.name}</Text>
         </Box>
         <Box margin="20px" width="50%">
           <Text fontSize="5xl" fontWeight="medium">
@@ -80,19 +82,19 @@ const ProductDet = () => {
           </Text>
           <Text fontWeight="medium">{product.name}</Text>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Text fontSize="2xl">{product.rating}</Text>
-            <FontAwesomeIcon icon={faStar} size="xl" color="gold" /> |
-            <Text fontSize="2xl">reviews : {product.reviews}</Text>
+            <Text fontSize="lg">{product.rating}</Text>
+            <FontAwesomeIcon icon={faStar} size="sm" color="gold" /> |
+            <Text fontSize="lg">reviews : {product.reviews}</Text>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Text fontSize="2xl" fontWeight="medium">
+            <Text fontSize="lg" fontWeight="medium">
               &#8377;
               {product.cost}
             </Text>
-            <Text>
-              MRP<del style={{ fontSize: "20px" }}> &#8377;{original}</del>
+            <Text  fontSize="sm" color="gray.500" textDecoration='line-through'>
+               &#8377;{original}
             </Text>
-            <Text fontSize="1xl">Discount :{product.discount}%</Text>
+            <Text fontSize="sm" color='green.500'>Discount :{product.discount}%</Text>
           </div>
           <Text fontWeight="medium" color="green">
             Inclusive of all taxes
@@ -120,8 +122,8 @@ const ProductDet = () => {
               Add to Bag
             </Button>
 
-            <Button width="100% " backgroundColor="rgb(87, 182, 219)" onClick={()=>handleWish(product.id)}>
-              Add to wishlist
+            <Button width="100% " backgroundColor="rgb(87, 182, 219)" onClick={()=>handleWish(product.id)} disabled={wish}>
+             {wish ? "wishlisted": 'Add to wishlist'}
             </Button>
           </Box>
         </Box>

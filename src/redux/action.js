@@ -83,13 +83,31 @@ export const getPage=(page)=>async(dispatch)=>{
 
 
 
- export const fetchBag = (bagId) =>async(dispatch)=> {
+ export const fetchBag = (bagId,size) =>async(dispatch)=> {
     
     
     dispatch({type:REQUEST_BAG})
+    for (let i = 0; i < bagId.length; i++) {
+            const response = await axios.get(`http://localhost:3000/products/${bagId[i]}`);
+            dispatch({ type: SUCCESS_BAG, payload: response.data, size: size[i] });
+        }
     
-    bagId.forEach(x=>axios.get(`http://localhost:3000/products/${x}`).then(y=>dispatch({type:SUCCESS_BAG,payload:y.data})))
     
+  };
+
+  export const postBag = (bagId) =>async(dispatch)=> {
+    
+    
+   try{
+    dispatch({type:REQUEST_BAG})
+     const response = await axios.get(`http://localhost:3000/products/${bagId}`);
+    
+
+    dispatch({type:SUCCESS_BAG,payload:response.data})
+
+ }catch(error){
+    dispatch({type:FAILURE_BAG})
+ } 
   };
 
   export const fetchWish = (bagId) =>async(dispatch)=> {
