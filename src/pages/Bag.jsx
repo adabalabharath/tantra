@@ -20,10 +20,10 @@ const Bag = () => {
 
   useEffect(() => {
     fetch();
-    if (data.length === 0) {
-    nav('/empty')
-  }
   }, [bagId,dispatch]);
+    if (data.length === 0) {
+   return <Empty/>
+  }
 
   
 

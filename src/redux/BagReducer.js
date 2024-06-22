@@ -8,7 +8,7 @@ const initial={
 }
 
 export const bagReducer=(state=initial,action)=>{
-    console.log(action.payload)
+    
     switch(action.type){
         case SUCCESS_BAG:
             return{

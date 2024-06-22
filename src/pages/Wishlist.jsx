@@ -13,9 +13,11 @@ const Wishlist = () => {
   const data = useSelector((x) => x.wishReducer.data);
   const { wishlist, bagId } = useContext(HoverContext);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchWish(wishlist));
-  }, [bagId]);
+  }, [wishlist]);
+
 
   if (data.length == 0) {
     return <Empty />;

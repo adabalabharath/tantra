@@ -4,7 +4,7 @@ import { FAILURE_BAG, FAILURE_PRODUCT, REQUEST_BAG, REQUEST_PRODUCT, REQUEST_WIS
 
 export const getProductsByCat=(obj)=>async(dispatch)=>{
  try{
-   console.log(obj)
+   
     dispatch({type:REQUEST_PRODUCT})
     let data=await axios.get('http://localhost:3000/products',obj)
     console.log(data.data)
@@ -33,10 +33,11 @@ export const getProd=async(dispatch)=>{
     let data=await axios.get('http://localhost:3000/products')
     console.log(data.data)
     dispatch({type:SUCCESS_PRODUCT,payload:data.data})
+    return data
  }catch(error){
     dispatch({type:FAILURE_PRODUCT})
  }
- return data
+ 
 }
 
 export const filter=(search)=>async(dispatch)=>{

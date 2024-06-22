@@ -33,21 +33,23 @@ const Product = () => {
 
     const searchQuery=searchParams.get('search')
 
-   useEffect(()=>{
-     
-     if (searchQuery) {
-      let obj = {
+      let sobj = {
         params: {
           q: searchQuery,
         },
       };
-      dispatch(getSearch(obj));
+   useEffect(()=>{
+     
+     if (searchQuery) {
+      dispatch(getSearch(sobj));
     } else {
       dispatch(getProductsByCat(obj))
       
    }},[location.search])
 
-    
+    if(data.length===0){
+      return <Error/>
+    }
    
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Filters from '../components/Products/Filters'
 import { Box } from '@chakra-ui/react'
 import Product from '../components/Products/Product'
@@ -8,13 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { getProd } from '../redux/action'
 import Pagination from '../components/Products/Pagination'
+import { HoverContext } from '../redux/HoverProvider'
 const Store = () => {
-  
-   const data=useSelector(s=>s.productReducer.data)
-   const nav=useNavigate()
-   if(data.length===0){
-      return <Error/>
-    }
+ 
 
   return (
     <>
